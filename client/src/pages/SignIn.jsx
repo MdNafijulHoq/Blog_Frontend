@@ -1,17 +1,45 @@
 import { Eye, EyeOff } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import Return from '../components/Return';
+import toast from 'react-hot-toast';
+import AuthStore from '../hooks/useAuthStore';
 
 const SignIn = () => {
     const [showPass, setShowPass] = useState(false);
     const navigate = useNavigate();
+    const { AuthUser, signIn } = AuthStore();
 
-    axios =
+    const [formData, setFormData] = useState({ username: "", password: "" });
+    const handleInput = (key, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if(AuthUser){
+      navigate("/")
+    }
+  },[AuthUser, navigate])
+
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if(!formData.username || !formData.password){
+        return toast.error("All Fields are required");
+      }
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(formData.password)) {
+        return toast.error("Invalid Credentials");
+      }
+      console.log("form Data", formData);
+      signIn(formData);
+  };
     
     return (
         <div className="h-screen flex justify-center items-center bg-gray-100">
-      <form
+      <form onSubmit={handleFormSubmit}
         className="max-w-[400px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white"
       >
         <div onClick={() => navigate("/")} className="flex justify-end">
@@ -20,25 +48,31 @@ const SignIn = () => {
 
         <h1 className="text-gray-900 text-3xl mt-10 font-medium">Login</h1>
         <p className="text-gray-500 text-sm mt-2">Please sign in to continue</p>
+
         <div className="flex items-center w-full mt-10 bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
           <svg
-            width="16"
-            height="11"
-            viewBox="0 0 16 11"
+            width="18"
+            height="18"
+            viewBox="0 0 15 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M0 .55.571 0H15.43l.57.55v9.9l-.571.55H.57L0 10.45zm1.143 1.138V9.9h13.714V1.69l-6.503 4.8h-.697zM13.749 1.1H2.25L8 5.356z"
-              fill="#6B7280"
+              d="M3.125 13.125a4.375 4.375 0 0 1 8.75 0M10 4.375a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"
+              stroke="#6B7280"
+              strokeOpacity=".6"
+              strokeWidth="1.3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
+
           <input
-            type="email"
-            placeholder="Email id"
             className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
+            type="text"
+            value={formData.username}
+            onChange={(e) => handleInput("username", e.target.value)}
+            placeholder="Username"
             required
           />
         </div>
@@ -59,6 +93,8 @@ const SignIn = () => {
           <input
             type={showPass ? "text" : "password"}
             placeholder="Password"
+            value={formData.password}
+            onChange={(e) => handleInput("password", e.target.value)}
             className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
             required
           />

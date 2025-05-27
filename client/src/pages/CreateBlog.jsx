@@ -62,17 +62,6 @@ const CreateBlog = () => {
             className="w-full file:border-0 file:bg-primary file:text-white file:px-4 file:py-2 file:rounded-md file:cursor-pointer"
           />
         </div>
-
-        {/* Optional: Author Field */}
-        
-        {/* <div>
-          <label className="block text-gray-700 font-semibold mb-2">Author Name</label>
-          <input
-            type="text"
-            placeholder="Your name"
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>  */}
        
 
         {/* Submit Button */}

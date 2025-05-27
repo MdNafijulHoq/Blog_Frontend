@@ -1,14 +1,55 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import Return from '../components/Return';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, PhoneOutgoing } from 'lucide-react';
+import toast from 'react-hot-toast';
+import AuthStore from '../hooks/useAuthStore';
 
 const SignUp = () => {
     const [showPass, setShowPass] = useState(false);
     const navigate = useNavigate();
+    const {signUp} = AuthStore();
+
+    const [formData, setFormData] = useState(
+      { 
+        name: "", 
+        username: "",
+        email: "", 
+        password: "", 
+        contact: "" 
+      }
+    );
+
+    const handleInput = (key, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.password) {
+      return toast.error("All Fields are required");
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      return toast.error("Please enter a valid email address");
+    }
+    if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(
+        formData.password
+      )
+    ) {
+      return toast.error("Strong Password Required");
+    }
+    console.log(formData);
+    signUp(formData);
+  };
+
+
     return (
         <div className="h-screen flex justify-center items-center bg-gray-100">
-      <form
+      <form onSubmit={handleFormSubmit}
         className="max-w-[400px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white"
       >
         <div onClick={() => navigate("/")} className="flex justify-end">
@@ -36,12 +77,43 @@ const SignUp = () => {
           </svg>
 
           <input
-            className="w-full outline-none bg-transparent py-2.5"
+            className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
             type="text"
+            value={formData.name}
+            onChange={(e) => handleInput("name", e.target.value)}
+            placeholder="Full Name"
+            required
+          />
+        </div>
+
+        <div className="flex items-center w-full mt-4 bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3.125 13.125a4.375 4.375 0 0 1 8.75 0M10 4.375a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"
+              stroke="#6B7280"
+              strokeOpacity=".6"
+              strokeWidth="1.3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          <input
+            className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
+            type="text"
+             value={formData.username}
+            onChange={(e) => handleInput("username", e.target.value)}
             placeholder="Username"
             required
           />
         </div>
+
 
         <div className="flex items-center w-full mt-4 bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
           <svg
@@ -61,6 +133,8 @@ const SignUp = () => {
           <input
             type="email"
             placeholder="Email"
+             value={formData.email}
+            onChange={(e) => handleInput("email", e.target.value)}
             className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
             required
           />
@@ -82,6 +156,8 @@ const SignUp = () => {
           <input
             type={showPass ? "text" : "password"}
             placeholder="Password"
+             value={formData.password}
+            onChange={(e) => handleInput("password", e.target.value)}
             className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
             required
           />
@@ -97,6 +173,19 @@ const SignUp = () => {
             )}
           </button>
         </div>
+
+        <div className="flex items-center w-full mt-4 bg-white border border-gray-300/80 h-12 rounded-full overflow-hidden pl-6 gap-2">
+          <PhoneOutgoing size={17} />
+          <input
+            className="bg-transparent text-gray-500 placeholder-gray-500 outline-none text-sm w-full h-full"
+            type="number"
+             value={formData.contact}
+            onChange={(e) => handleInput("contact", e.target.value)}
+            placeholder="Contact Number"
+            required
+          />
+        </div>
+
 
         <button
           type="submit"

@@ -1,11 +1,16 @@
 import { FileText, LogOut, Menu, PlusCircle } from "lucide-react";
 import React from "react";
 import { Link, NavLink } from "react-router";
+import AuthStore from "../hooks/useAuthStore";
 
 const Navbar = () => {
 
+  const {AuthUser} = AuthStore();
+  console.log("AuthUser", AuthUser);
   
-  const UserLogin = false;
+
+  
+  const UserLogin = true;
   return (
     <div className="navbar bg-base-100 max-w-7xl mx-auto">
       <div className="navbar-start">
@@ -68,7 +73,7 @@ const Navbar = () => {
       </div>
 
       <div className="navbar-end">
-        {UserLogin ? (
+        {AuthUser ? (
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}

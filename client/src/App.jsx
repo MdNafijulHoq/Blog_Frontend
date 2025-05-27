@@ -12,16 +12,18 @@ function App() {
 
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Home/>} />
-        <Route path="/all-blog" element={<AllBlog/>} />
-        <Route path="/create-blog" element={<CreateBlog/>} />
-        <Route path="/my-blog" element={<MyBlog/>} />
-        <Route path="/sign-in" element={<SignIn/>} />
-        <Route path="/sign-up" element={<SignUp/>} />
-    </Routes>
+    
+          <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/all-blog" element={<AllBlog/>} />
+          <Route path="/create-blog" element={<CreateBlog/>} />
+          <Route path="/my-blog" element={<MyBlog/>} />
+          <Route path="/sign-in" element={<SignIn/>} />
+          <Route path="/sign-up" element={<SignUp/>} />
+        </Routes>
+   
     </>
   )
 }
 
-export default App
+export default App;
